@@ -320,10 +320,40 @@ const poll = {
       str = str + option + '\n';
       //console.log(option);
     }
-
     //console.log(str);
-    console.log(prompt(`${this.question}\n${str}`));
+    const vote = Number(prompt(`${this.question}\n${str}`));
+    if (vote === 0) {
+      this.answers[0]++;
+      return this.displayResults();
+    } else if (vote === 1) {
+      this.answers[1]++;
+      return this.displayResults();
+    } else if (vote === 2) {
+      this.answers[2]++;
+      return this.displayResults();
+    } else if (vote === 3) {
+      this.answers[3]++;
+      return this.displayResults();
+    } else {
+      console.log('Not a valied Number!');
+    }
+  },
+  displayResults() {
+    console.log(Object.values(this.answers));
   },
 };
 
-poll.registerNewAnswer();
+//console.log(poll.answers);
+
+document
+  .querySelector('.poll')
+  .addEventListener('click', poll.registerNewAnswer.bind(poll));
+
+//--------------------------Bonus Question
+// const Data1 = [5, 2, 3];
+// const Data2 = [1, 5, 3, 9, 6, 1];
+
+// const result = poll.displayResults;
+
+// const dataresult = result.bind(Data1);
+// dataresult();
