@@ -160,6 +160,8 @@ passOrFail(userinfo, calcaverage);
 
 */
 
+/*
+
 // Functions Returning Functions
 const greet = function (greeting) {
   return function (name) {
@@ -177,3 +179,151 @@ greet('Hello')('Jonas');
 const greet1 = greeting1 => name1 => console.log(`${greeting1} ${name1}`);
 
 greet1('hi')("I'm Sorry");
+
+*/
+
+/*
+
+const lufthansa = {
+  airline: 'Lufthansa',
+  iataCode: 'LH',
+  bookings: [],
+  //book: function(){}
+  book(flightNum, name) {
+    console.log(
+      `${name} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`
+    );
+    this.bookings.push({ flight: `${this.iataCode}${flightNum}`, name }); // I need '{}' because these are another object itself
+  },
+};
+
+lufthansa.book(239, 'Jonas Schmedtmann');
+lufthansa.book(635, 'John Smith');
+console.log(lufthansa.bookings);
+
+const eurowings = {
+  airline: 'Eurowings',
+  iataCode: 'EW',
+  bookings: [],
+};
+
+const book = lufthansa.book; // function is a value itselft as well so I can store it into a variable
+
+//book(23, 'Sara Williams'); // since I stored 'lufthansa.book' into a new variable, it's now a regular function outside of the object
+// So 'this'keyword inside of 'book' function has nowhere to point out. = > 'undefined'
+
+// Call Method
+book.call(eurowings, 23, 'Sarah Willianms');
+console.log(eurowings);
+
+book.call(lufthansa, 239, 'Mary Cooper');
+console.log(lufthansa);
+
+const swiss = {
+  airline: 'Swiss Air Lines',
+  iataCode: 'LX',
+  bookings: [],
+};
+
+book.call(swiss, 58, 'Mary Cooper');
+console.log(swiss);
+
+// Apply method  --> same as call methoed but it gets an array as an argument
+const flightData = [583, 'George Cooper'];
+book.apply(swiss, flightData);
+console.log(swiss);
+
+book.call(swiss, ...flightData);
+// 'Applay' metoed is not often used in modern JS because of  '...' spread operator
+
+*/
+
+/*
+// Bind Methoed
+//book.call(eurowings, 23, 'Sara Williams')
+
+// Bind Methoed sets function itself into a new variable for multiple uses
+const bookEW = book.bind(eurowings);
+const bookLH = book.bind(lufthansa);
+const bookLX = book.bind(swiss);
+
+bookEW(23, 'Steven Williams'); // I dont have to set 'this'keyword argument as a first argument
+
+const bookEW23 = book.bind(eurowings, 23); // bind can also pre-set the argument 'flightNum'
+// It is called 'partial application' which means a part of the arguments of the original function are 'already applied'
+bookEW23('Jonas Schmedtmann');
+bookEW23('Martha Cooper');
+
+// With EventListeners
+
+lufthansa.planes = 300; // adding more keys in lufthansa object.
+lufthansa.buyPlane = function () {
+  console.log(this);
+  this.planes++;
+  console.log(this.planes);
+};
+//lufthansa.buyPlane();
+
+document
+  .querySelector('.buy')
+  .addEventListener('click', lufthansa.buyPlane.bind(lufthansa));
+// I do not 'call' the function. I want to just 'set' 'where to 'this' keyword to point out
+// If I use 'call' methoed I have to use the function right away but in this case, in event handler function, I DO NOT call the function
+
+// Partial application
+const addTax = (rate, value) => value + value * rate;
+console.log(addTax(0.1, 200));
+
+// addVAT = value => value + value *0.23
+const addVAT = addTax.bind(null, 0.23); // there's no 'this' key workd in 'addTax' function. so just make it 'null' CANNOT be empty
+// pre-set the 'rate' as 0.23
+// when i want to pre-set the argument, it has to be always the 'First argument' to be used.
+// ORDER of ARGUMENTS is IMPORTANT
+// I could pre-set the 'rate' parameter in 'addTax' function, HOWEVER, that changes the original function.
+// with 'bind' methoed, it gives me a NEW function
+console.log(addVAT(100));
+console.log(addVAT(23));
+
+//Making Function inside of function
+// Solution
+const addTaxRate = function (rate) {
+  return function (value) {
+    return value + value * rate;
+  };
+};
+const addVAT2 = addTaxRate(0.23);
+console.log(addVAT2(100));
+console.log(addVAT2(23));
+console.log(addTaxRate(0.23)(100));
+
+// ONTARIO HST
+const calHST = function (value) {
+  return function (rate) {
+    // make sure to write 'return'
+    return value + value * rate;
+  };
+};
+
+console.log(calHST(100)(0.13));
+
+*/
+
+// Coding Challenge #1
+const poll = {
+  question: 'What is your favourite programming language?',
+  options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
+  // This generates [0, 0, 0, 0]. More in the next section 😃
+  answers: new Array(4).fill(0),
+  registerNewAnswer() {
+    let str = '';
+    for (const option of this.options) {
+      str = str + option + '\n';
+      //console.log(option);
+    }
+
+    //console.log(str);
+    console.log(prompt(`${this.question}\n${str}`));
+  },
+};
+
+poll.registerNewAnswer();
