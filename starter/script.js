@@ -308,46 +308,48 @@ console.log(calHST(100)(0.13));
 
 */
 
+/*
+
 // Coding Challenge #1
-const poll = {
-  question: 'What is your favourite programming language?',
-  options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
-  // This generates [0, 0, 0, 0]. More in the next section 😃
-  answers: new Array(4).fill(0),
-  registerNewAnswer() {
-    let str = '';
-    for (const option of this.options) {
-      str = str + option + '\n';
-      //console.log(option);
-    }
-    //console.log(str);
-    const vote = Number(prompt(`${this.question}\n${str}`));
-    if (vote === 0) {
-      this.answers[0]++;
-      return this.displayResults();
-    } else if (vote === 1) {
-      this.answers[1]++;
-      return this.displayResults();
-    } else if (vote === 2) {
-      this.answers[2]++;
-      return this.displayResults();
-    } else if (vote === 3) {
-      this.answers[3]++;
-      return this.displayResults();
-    } else {
-      console.log('Not a valied Number!');
-    }
-  },
-  displayResults() {
-    console.log(Object.values(this.answers));
-  },
-};
+// const poll = {
+//   question: 'What is your favourite programming language?',
+//   options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
+//   // This generates [0, 0, 0, 0]. More in the next section 😃
+//   answers: new Array(4).fill(0),
+//   registerNewAnswer() {
+//     let str = '';
+//     for (const option of this.options) {
+//       str = str + option + '\n';
+//       //console.log(option);
+//     }
+//     //console.log(str);
+//     const vote = Number(prompt(`${this.question}\n${str}`));
+//     if (vote === 0) {
+//       this.answers[0]++;
+//       return this.displayResults();
+//     } else if (vote === 1) {
+//       this.answers[1]++;
+//       return this.displayResults();
+//     } else if (vote === 2) {
+//       this.answers[2]++;
+//       return this.displayResults();
+//     } else if (vote === 3) {
+//       this.answers[3]++;
+//       return this.displayResults();
+//     } else {
+//       console.log('Not a valied Number!');
+//     }
+//   },
+//   displayResults() {
+//     console.log(Object.values(this.answers));
+//   },
+// };
 
-//console.log(poll.answers);
+// //console.log(poll.answers);
 
-document
-  .querySelector('.poll')
-  .addEventListener('click', poll.registerNewAnswer.bind(poll));
+// document
+//   .querySelector('.poll')
+//   .addEventListener('click', poll.registerNewAnswer.bind(poll));
 
 //--------------------------Bonus Question
 // const Data1 = [5, 2, 3];
@@ -357,3 +359,173 @@ document
 
 // const dataresult = result.bind(Data1);
 // dataresult();
+
+const poll = {
+  question: 'What is your favourite programming language?',
+  options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
+  // This generates [0, 0, 0, 0]. More in the next section 😃
+  answers: new Array(4).fill(0),
+  registerNewAnswer() {
+    const answer = Number(
+      prompt(
+        `${this.question}\n${this.options.join('\n')}\n(Write option number)`
+      )
+    );
+    typeof answer === 'number' &&
+      answer < this.answers.length &&
+      this.answers[answer]++;
+    //console.log(this.answers);
+    this.displayResults();
+    this.displayResults('string');
+  },
+  displayResults(type = 'array') {
+    if (type === 'array') {
+      console.log(this.answers);
+    } else if (type === 'string') {
+      console.log(`Poll results are ${this.answers.join(', ')}`);
+    }
+  },
+};
+
+//poll.registerNewAnswer();
+
+document
+  .querySelector('.poll')
+  .addEventListener('click', poll.registerNewAnswer.bind(poll));
+
+poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] });
+poll.displayResults.call({ answers: [5, 2, 3] }, 'string');
+
+// Make sure to print same format as where 'this'keyword points out
+//in this case, (this.answers) is exist in the object therefore '{}' is needed to have same format as 'answers'
+// I can also have second parameter which is either 'array' or 'string'. since 'array' is default I dont have to put 'array' in but 'string'
+// the first parameter should always be 'where this keyword to point to'
+
+*/
+
+/*
+// Immediately Invoked Function Expressions ( IIFE )
+//regular function 
+const runOnce = function () {
+  console.log('This will never run again');
+};
+runOnce();
+
+// IIFE
+(function () {
+  console.log('This will never run again');
+  const isPrivate = 23;
+})();
+
+// 1) do not have to ser in a variable
+// 2) '(function)' for the entire function body
+// 3) (function) then '()' at the end of function to excute
+
+
+// console.log(isPrivate);    -> script.js:418 Uncaught ReferenceError: isPrivate is not defined
+// I cannot access 'isprivate' variable because of scope chain
+//inner scoap can access to global scope but not other way around
+
+// IIFE for arrow function
+(() => console.log('This will ALSO never run again'))();
+
+{
+  const isPrivate = 23;
+  var notPrivate = 46;
+}
+
+
+//console.log(isPrivate);
+console.log(notPrivate);
+
+*/
+
+/*
+
+// Closures
+
+// Closures have a priority over the scope chain
+const secureBooking = function () {
+  let passengerCount = 0;
+
+  return function () {
+    passengerCount++;
+    console.log(`${passengerCount}passengers`);
+  };
+};
+
+const booker = secureBooking();
+
+booker();
+booker();
+booker();
+
+console.dir(booker);
+
+*/
+
+/*
+// More examples of Closures
+// Example 1
+
+let f;
+
+const g = function () {
+  const a = 23;
+  f = function () {
+    console.log(a * 2);
+  };
+};
+
+const h = function () {
+  const b = 777;
+  f = function () {
+    console.log(b * 2);
+  };
+};
+g();
+f();
+console.dir(f);
+
+// Re - assigning f function
+h();
+f();
+
+console.dir(f);
+
+// Example 2
+
+const boardPassengers = function (n, wait) {
+  const perGroup = n / 3;
+
+  setTimeout(function () {
+    console.log(`We are now boarding all in ${n} passengers`);
+    console.log(`There are 3 groups, each with ${perGroup} passengers`);
+  }, wait * 1000);
+
+  console.log(`Will start boarding in ${wait} seconds`);
+};
+
+const perGroup = 1000; // even though 'pergroup' is assinged in global scope, closure is over the scope chain.
+boardPassengers(180, 3);
+
+// setTimeout(function () {
+//   console.log('TIMER');
+// }, 1000);
+
+// 'setTimeout' is a 'call back function' because it will be called after one second in this case
+// 'setTimeout' needs two parameters first one will be function and second one will be setting time (function(){}, 1000)
+// 1000 mili second = 1 second -> it will appear after 1 second
+
+*/
+
+// Coding Challenge #2
+
+(function () {
+  const header = document.querySelector('h1');
+  header.style.color = 'red';
+
+  document.querySelector('body').addEventListener('click', function () {
+    header.style.color = 'blue';
+  });
+})();
